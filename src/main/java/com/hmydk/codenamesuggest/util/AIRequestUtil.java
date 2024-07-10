@@ -23,7 +23,7 @@ public class AIRequestUtil {
     }
 
     public static String getAIResponse(String textContent) {
-        textContent = "将下面的文本转换成符合Java命名规范的英文字段名：" + textContent;
+        textContent = PromptDesign.getPrompt("English", "Variable", textContent);
         System.out.println(textContent);
 
 
