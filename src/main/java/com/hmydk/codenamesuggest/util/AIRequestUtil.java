@@ -1,5 +1,6 @@
 package com.hmydk.codenamesuggest.util;
 
+import com.hmydk.codenamesuggest.config.PromptDesign;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
