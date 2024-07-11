@@ -31,7 +31,7 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable instance="com.hmydk.codenamesuggest.config.ApiKeyConfigurable"/>
+        <applicationConfigurable instance="com.hmydk.codenamesuggest.config.ApiKeyConfigurable" displayName="ApiKeyConfigurable"/>
         <applicationService serviceImplementation="com.hmydk.codenamesuggest.config.ApiKeySettings"/>
     </extensions>
     <actions>
