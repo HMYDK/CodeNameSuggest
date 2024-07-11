@@ -18,16 +18,14 @@ import java.nio.charset.StandardCharsets;
 public class AIRequestUtil {
     public static void main(String[] args) {
         String textContent = "逻辑删除";
-        String responseText = getAIResponse(textContent);
+        String responseText = getAIResponse("AIzaSyAJjqnV4S3oatR4x-lenL96mXwxtzc6z5U", textContent);
         System.out.println("Response Text: " + responseText);
     }
 
-    public static String getAIResponse(String textContent) {
+    public static String getAIResponse(String apiKey, String textContent) {
         textContent = PromptDesign.getPrompt("English", "Variable", textContent);
         System.out.println(textContent);
 
-
-        String apiKey = "AIzaSyAJjqnV4S3oatR4x-lenL96mXwxtzc6z5U";  // 替换为你的实际API密钥
         String apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + apiKey;
         String jsonInputString = "{\"contents\":[{\"parts\":[{\"text\":\"" + textContent + "\"}]}]}";
 

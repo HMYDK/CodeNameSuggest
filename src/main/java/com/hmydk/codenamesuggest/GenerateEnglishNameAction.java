@@ -1,5 +1,6 @@
 package com.hmydk.codenamesuggest;
 
+import com.hmydk.codenamesuggest.config.ApiKeySettings;
 import com.hmydk.codenamesuggest.util.AIRequestUtil;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -52,7 +53,12 @@ public class GenerateEnglishNameAction extends AnAction {
     }
 
     private String generateEnglishName(String input) {
-        return AIRequestUtil.getAIResponse(input.replace(' ', '_'));
+        String apiKey = ApiKeySettings.getInstance().getApiKey();
+        if (apiKey == null || apiKey.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please configure your Google API key first.", "No API Key Configured", JOptionPane.WARNING_MESSAGE);
+            return "";
+        }
+        return AIRequestUtil.getAIResponse(apiKey, input.replace(' ', '_'));
     }
 
     private void showSuggestionDialog(Project project, String suggestion) {

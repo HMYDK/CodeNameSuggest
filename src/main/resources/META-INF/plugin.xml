@@ -20,15 +20,16 @@
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
-<!--    <depends>com.intellij.modules.platform</depends>-->
+    <!--    <depends>com.intellij.modules.platform</depends>-->
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
-    </extensions>
+        <applicationConfigurable instance="com.hmydk.codenamesuggest.config.ApiKeyConfigurable"/>
+        <applicationService serviceImplementation="com.hmydk.codenamesuggest.config.ApiKeySettings"/>    </extensions>
     <actions>
-        <action id="com.hmydk.codenamesuggest.GenerateEnglishNameAction" class="com.hmydk.codenamesuggest.GenerateEnglishNameAction"
+        <action id="com.hmydk.codenamesuggest.GenerateEnglishNameAction"
+                class="com.hmydk.codenamesuggest.GenerateEnglishNameAction"
                 text="CodeNameSuggest" description="give a code name suggestion">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="alt E"/>
