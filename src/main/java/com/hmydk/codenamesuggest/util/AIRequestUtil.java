@@ -1,8 +1,8 @@
 package com.hmydk.codenamesuggest.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hmydk.codenamesuggest.config.PromptDesign;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,7 +25,6 @@ public class AIRequestUtil {
 
     public static String getAIResponse(String apiKey, String textContent) {
         textContent = PromptDesign.getPrompt("English", "Variable", textContent);
-        System.out.println(textContent);
 
         String apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + apiKey;
         String jsonInputString = "{\"contents\":[{\"parts\":[{\"text\":\"" + textContent + "\"}]}]}";
@@ -49,11 +48,6 @@ public class AIRequestUtil {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
-
-            // 获取响应码
-            int responseCode = connection.getResponseCode();
-            System.out.println(responseCode);
-
             // 读取响应并打印
             StringBuilder response = new StringBuilder();
             try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
@@ -63,19 +57,19 @@ public class AIRequestUtil {
                 }
             }
 
-            // 解析JSON响应
-            JSONObject jsonResponse = new JSONObject(response.toString());
-            JSONArray candidates = jsonResponse.getJSONArray("candidates");
-            if (!candidates.isEmpty()) {
-                JSONObject firstCandidate = candidates.getJSONObject(0);
-                JSONObject content = firstCandidate.getJSONObject("content");
-                JSONArray parts = content.getJSONArray("parts");
-                if (!parts.isEmpty()) {
-                    JSONObject firstPart = parts.getJSONObject(0);
-                    return firstPart.getString("text");
+            // 使用Jackson解析JSON响应
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonResponse = objectMapper.readTree(response.toString());
+            JsonNode candidates = jsonResponse.path("candidates");
+            if (candidates.isArray() && candidates.size() > 0) {
+                JsonNode firstCandidate = candidates.get(0);
+                JsonNode content = firstCandidate.path("content");
+                JsonNode parts = content.path("parts");
+                if (parts.isArray() && parts.size() > 0) {
+                    JsonNode firstPart = parts.get(0);
+                    return firstPart.path("text").asText();
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

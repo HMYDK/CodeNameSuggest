@@ -16,12 +16,10 @@
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
     AI CodeName Suggest<br>
-    <em>
     <p>Elevate your coding experience with <strong>AI CodeName Suggest</strong>!
     This powerful IntelliJ IDEA plugin leverages advanced AI algorithms to provide intelligent and context-aware naming suggestions for your code.
     Whether you're naming variables, methods, classes, or other code elements,
     <strong>AI CodeName Suggest</strong> ensures that your names are meaningful, consistent, and aligned with best practices.</p>
-    </em>
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
