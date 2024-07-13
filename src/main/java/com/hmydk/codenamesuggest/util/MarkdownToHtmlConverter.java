@@ -7,6 +7,10 @@ package com.hmydk.codenamesuggest.util;
  */
 public class MarkdownToHtmlConverter {
     public static String convertToHtml(String markdown) {
+        if (markdown == null || markdown.isEmpty()) {
+            return "ai response is empty";
+        }
+
         StringBuilder html = new StringBuilder();
 
         // 将标题转换为HTML

@@ -30,9 +30,9 @@ public class GenerateEnglishNameAction extends AnAction {
         Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         String selectedText = editor.getSelectionModel().getSelectedText();
         if (selectedText != null && !selectedText.trim().isEmpty()) {
-            String englishSuggestion = generateEnglishName(selectedText);
-            englishSuggestion = MarkdownToHtmlConverter.convertToHtml(englishSuggestion);
-            showSuggestionDialog(e.getProject(), englishSuggestion);
+            String codeSuggestion = generateAICodeName(selectedText);
+            codeSuggestion = MarkdownToHtmlConverter.convertToHtml(codeSuggestion);
+            showSuggestionDialog(e.getProject(), codeSuggestion);
         } else {
             JOptionPane.showMessageDialog(null, "Please select some text first.", "No Text Selected", JOptionPane.WARNING_MESSAGE);
         }
@@ -51,7 +51,7 @@ public class GenerateEnglishNameAction extends AnAction {
         return ActionUpdateThread.EDT;
     }
 
-    private String generateEnglishName(String input) {
+    private String generateAICodeName(String input) {
         String apiKey = ApiKeySettings.getInstance().getApiKey();
         if (apiKey == null || apiKey.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please configure your Google API key first.", "No API Key Configured", JOptionPane.WARNING_MESSAGE);
@@ -87,7 +87,7 @@ public class GenerateEnglishNameAction extends AnAction {
 
             // Set up scrolling
             JBScrollPane scrollPane = new JBScrollPane(editorPane);
-            scrollPane.setPreferredSize(new Dimension(500, 300));
+            scrollPane.setPreferredSize(new Dimension(900, 600));
             dialogPanel.add(scrollPane, BorderLayout.CENTER);
 
             return dialogPanel;

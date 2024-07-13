@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 public class AIRequestUtil {
     public static void main(String[] args) {
         String textContent = "逻辑删除";
-        String responseText = getAIResponse("123", textContent);
+        String responseText = getAIResponse("AIzaSyAJjqnV4S3oatR4x-lenL96mXwxtzc6z5U", textContent);
         System.out.println("Response Text: " + responseText);
     }
 

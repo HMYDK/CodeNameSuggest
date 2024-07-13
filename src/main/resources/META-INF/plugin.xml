@@ -29,7 +29,8 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable instance="com.hmydk.codenamesuggest.config.ApiKeyConfigurable" displayName="ApiKeyConfigurable"/>
+        <applicationConfigurable instance="com.hmydk.codenamesuggest.config.ApiKeyConfigurable"
+                                 displayName="ApiKeyConfigurable"/>
         <applicationService serviceImplementation="com.hmydk.codenamesuggest.config.ApiKeySettings"/>
     </extensions>
     <actions>
@@ -37,7 +38,16 @@
                 class="com.hmydk.codenamesuggest.GenerateEnglishNameAction"
                 text="AI CodeName Suggest" description="AI CodeName Suggest">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt E"/>
         </action>
     </actions>
+
+    <change-notes>
+        <![CDATA[
+        <h3>v1.0.1</h3>
+        <ul>
+            <li>Updated the size of notification popups</li>
+            <li>Removed existing plugin shortcuts</li>
+        </ul>
+        ]]>
+    </change-notes>
 </idea-plugin>
