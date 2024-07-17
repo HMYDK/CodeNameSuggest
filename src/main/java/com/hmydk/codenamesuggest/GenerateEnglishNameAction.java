@@ -7,9 +7,14 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,15 +32,35 @@ import java.awt.*;
 public class GenerateEnglishNameAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
+        Project project = e.getProject();
+        if (project == null) {
+            return;
+        }
+
         Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         String selectedText = editor.getSelectionModel().getSelectedText();
-        if (selectedText != null && !selectedText.trim().isEmpty()) {
-            String codeSuggestion = generateAICodeName(selectedText);
-            codeSuggestion = MarkdownToHtmlConverter.convertToHtml(codeSuggestion);
-            showSuggestionDialog(e.getProject(), codeSuggestion);
-        } else {
+        if (selectedText == null || selectedText.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please select some text first.", "No Text Selected", JOptionPane.WARNING_MESSAGE);
         }
+
+
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Generating code name ...", true) {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                try {
+                    String codeSuggestion = generateAICodeName(selectedText);
+                    codeSuggestion = MarkdownToHtmlConverter.convertToHtml(codeSuggestion);
+                    String finalCodeSuggestion = codeSuggestion;
+                    ApplicationManager.getApplication().invokeLater(() -> {
+                        showSuggestionDialog(e.getProject(), finalCodeSuggestion);
+                    });
+                } catch (IllegalArgumentException ex) {
+                    showWarning(project, ex.getMessage(), "CodeNameSuggest Warning");
+                } catch (Exception ex) {
+                    showError(project, "Error generating code name: " + ex.getMessage(), "Error");
+                }
+            }
+        });
     }
 
     @Override
@@ -53,11 +78,30 @@ public class GenerateEnglishNameAction extends AnAction {
 
     private String generateAICodeName(String input) {
         String apiKey = ApiKeySettings.getInstance().getApiKey();
+        String language = ApiKeySettings.getInstance().getCommitLanguage();
         if (apiKey == null || apiKey.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please configure your Google API key first.", "No API Key Configured", JOptionPane.WARNING_MESSAGE);
             return "";
         }
-        return AIRequestUtil.getAIResponse(apiKey, input.replace(' ', '_'));
+        try {
+            return AIRequestUtil.getAIResponse(apiKey, language, input.replace(' ', '_'));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "AI Request Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return "";
+    }
+
+    private void showWarning(Project project, String message, String title) {
+        ApplicationManager.getApplication().invokeLater(() ->
+                Messages.showWarningDialog(project, message, title)
+        );
+    }
+
+    private void showError(Project project, String message, String title) {
+        ApplicationManager.getApplication().invokeLater(() ->
+                Messages.showErrorDialog(project, message, title)
+        );
     }
 
     private void showSuggestionDialog(Project project, String suggestion) {

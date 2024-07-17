@@ -14,7 +14,9 @@ import org.jetbrains.annotations.Nullable;
         storages = @Storage("EnglishNamingSuggestionSettings.xml")
 )
 public class ApiKeySettings implements PersistentStateComponent<ApiKeySettings> {
+    private String aiModel = "Gemini";
     private String apiKey = "";
+    private String commitLanguage = "English";
 
     public static ApiKeySettings getInstance() {
         return ApplicationManager.getApplication().getService(ApiKeySettings.class);
@@ -31,11 +33,27 @@ public class ApiKeySettings implements PersistentStateComponent<ApiKeySettings> 
         XmlSerializerUtil.copyBean(state, this);
     }
 
+    public String getAiModel() {
+        return aiModel;
+    }
+
+    public void setAiModel(String aiModel) {
+        this.aiModel = aiModel;
+    }
+
     public String getApiKey() {
         return apiKey;
     }
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public String getCommitLanguage() {
+        return commitLanguage;
+    }
+
+    public void setCommitLanguage(String commitLanguage) {
+        this.commitLanguage = commitLanguage;
     }
 }

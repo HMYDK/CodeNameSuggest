@@ -17,7 +17,7 @@ public class PromptDesign {
     public static final String PROMPT = """
             You are an expert programmer and naming consultant. Your task is to suggest appropriate names for code elements (variables, functions, classes, etc.) based on the provided context. Follow these guidelines:
             
-            Programming Language: {LANGUAGE}
+            Besides the provided code naming suggestions, please reply in the following language: {LANGUAGE}
             Type of element to name: {ELEMENT_TYPE}
             Original text or description: {ORIGINAL_TEXT}
             
